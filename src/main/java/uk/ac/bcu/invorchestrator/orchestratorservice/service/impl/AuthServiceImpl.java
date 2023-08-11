@@ -1,5 +1,6 @@
 package uk.ac.bcu.invorchestrator.orchestratorservice.service.impl;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Expression;
@@ -7,6 +8,7 @@ import org.apache.camel.http.base.HttpOperationFailedException;
 import org.apache.camel.model.RouteDefinition;
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.camel.support.DefaultMessage;
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.boot.json.GsonJsonParser;
 import org.springframework.stereotype.Service;
 import uk.ac.bcu.invorchestrator.orchestratorservice.config.ServiceEndpoints;
@@ -55,8 +57,8 @@ public class AuthServiceImpl implements AuthService {
                    var message = new DefaultMessage(exchange);
                    message.setHeader(Exchange.HTTP_RESPONSE_CODE, 500);
                    if(exception instanceof HttpOperationFailedException) {
-                       var parser = new GsonJsonParser();
-                       var responseBody = parser.parseMap(((HttpOperationFailedException) exception).getResponseBody());
+                       var parser = new JSONParser(((HttpOperationFailedException) exception).getResponseBody());
+                       var responseBody = parser.parseObject();
                        response = new DataResponse<String>(null, false, (String) responseBody.get("message"));
                        message.setHeader(Exchange.HTTP_RESPONSE_CODE, ((HttpOperationFailedException) exception).getStatusCode());
                    }
