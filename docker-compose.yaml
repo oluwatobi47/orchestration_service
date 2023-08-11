@@ -1,0 +1,42 @@
+version: '3'
+services:
+  auth_service:
+    container_name: soa_auth_service
+    image: alaooluwatobi/soa_auth_service:latest
+    ports:
+      - "3001:8080"
+    networks:
+      - my_network
+
+  warehouse_service:
+    container_name: soa_warehouse_service
+    image: alaooluwatobi/soa_wh_service:latest
+    ports:
+      - "3002:8000"
+    environment:
+      - BUILD_ENVIRONMENT=staging
+      - LOCAL_DATABASE_URL=mongodb://localhost:27017
+      - ATLAS_DATABASE_URL=mongodb+srv://leonardchinonso:soapassword@cluster0.76mnd.mongodb.net/soa?retryWrites=true&w=majority
+      - DATABASE_NAME=soa
+    networks:
+      - my_network
+
+  order_service:
+    container_name: soa_order_service
+    image: falug/order:11
+    ports:
+      - "3003:8080"
+    networks:
+      - my_network
+
+  notification_service:
+    container_name: soa_notification_service
+    image: falug/notification:5
+    ports:
+      - "3004:3000"
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
