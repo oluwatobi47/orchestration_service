@@ -1,15 +1,15 @@
 version: '3'
 services:
   auth_service:
-    container_name: soa_auth_service
+    container_name: auth_service
     image: alaooluwatobi/soa_auth_service:latest
     ports:
       - "3001:8080"
     networks:
       - my_network
 
-  warehouse_service:
-    container_name: soa_warehouse_service
+  warehouse-service:
+    container_name: warehouse_service
     image: alaooluwatobi/soa_wh_service:latest
     ports:
       - "3002:8000"
@@ -22,21 +22,28 @@ services:
       - my_network
 
   order_service:
-    container_name: soa_order_service
-    image: falug/order:11
+    container_name: order_service
+    image: falug/order:17
     ports:
       - "3003:8080"
     networks:
       - my_network
 
   notification_service:
-    container_name: soa_notification_service
-    image: falug/notification:5
+    container_name: notification_service
+    image: falug/notification:6
     ports:
       - "3004:3000"
     networks:
       - my_network
 
+  subscription_payment_service:
+    container_name: subscription_and_payment_service
+    image: barotemus/subpay:latest
+    ports:
+      - "3005:8000"
+    networks:
+      - my_network
 networks:
   my_network:
     driver: bridge
