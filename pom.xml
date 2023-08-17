@@ -47,6 +47,13 @@
 			<artifactId>camel-http-starter</artifactId>
 			<version>${camel.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.camel.springboot</groupId>
+			<artifactId>camel-springdoc-starter</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.apache.camel.springboot</groupId>
 			<artifactId>camel-rest-openapi-starter</artifactId>
@@ -68,8 +75,11 @@
 			<artifactId>camel-rest-swagger-starter</artifactId>
 			<version>${camel.version}</version>
 		</dependency>
-
-
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.36</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -81,10 +91,63 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>jakarta.xml.ws</groupId>
+			<artifactId>jakarta.xml.ws-api</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.sun.xml.ws</groupId>-->
+<!--			<artifactId>rt</artifactId>-->
+<!--			<version>2.3.1</version>-->
+<!--			<scope>provided</scope>-->
+<!--		</dependency>-->
+		<dependency>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>jaxws-rt</artifactId>
+			<version>2.3.6</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.ws</groupId>
+			<artifactId>jaxws-ri</artifactId>
+			<version>2.3.6</version>
+			<type>pom</type>
+		</dependency>
+
+<!--		<dependency>-->
+<!--			<groupId>jakarta.xml.bind</groupId>-->
+<!--			<artifactId>jakarta.xml.bind-api</artifactId>-->
+<!--		</dependency>-->
+
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-swagger-java</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-codegen-plugin</artifactId>
+			<version>3.3.0</version>
+			<type>maven-plugin</type>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>com.sun.xml.ws</groupId>
+				<artifactId>jaxws-maven-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<wsdlUrls>
+						<wsdlUrl>http://localhost:3003/OrderService?wsdl</wsdlUrl>
+					</wsdlUrls>
+					<keep>true</keep>
+					<packageName>uk.ac.bcu.orderservice.proxy</packageName>
+					<sourceDestDir>src/main/java</sourceDestDir>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
