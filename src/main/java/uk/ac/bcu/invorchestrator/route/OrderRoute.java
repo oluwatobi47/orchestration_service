@@ -35,7 +35,7 @@ public class OrderRoute extends RouteBuilder {
                 .consumes(MediaType.APPLICATION_JSON_VALUE)
                 .produces(MediaType.APPLICATION_JSON_VALUE)
                 .post("/order/place").to("direct:place-order").type(OrderRequest.class)
-                .post("/order/cancel/{orderRef}").to("direct:cancel-order")
+                .patch("/order/cancel/{orderRef}").to("direct:cancel-order")
                 .get("/orders/{clientId}").to("direct:get-client-orders");
 
         this.handleOrderRelatedBusinessLogic();

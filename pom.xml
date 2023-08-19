@@ -18,6 +18,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<camel.version>3.20.6</camel.version>
+		<order.service>${env.ORDER_SERVICE_URL}</order.service>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -114,11 +115,6 @@
 			<type>pom</type>
 		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>jakarta.xml.bind</groupId>-->
-<!--			<artifactId>jakarta.xml.bind-api</artifactId>-->
-<!--		</dependency>-->
-
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-swagger-java</artifactId>
@@ -134,15 +130,33 @@
 	</dependencies>
 
 	<build>
-		<plugins>
+		<resources>
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
+		</resources>		<plugins>
 			<plugin>
 				<groupId>com.sun.xml.ws</groupId>
 				<artifactId>jaxws-maven-plugin</artifactId>
 				<version>2.3.2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>wsimport</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
-					<wsdlUrls>
-						<wsdlUrl>http://localhost:3003/OrderService?wsdl</wsdlUrl>
-					</wsdlUrls>
+					<wsdlFiles>
+						<wsdlFile>src/main/resources/static/OrderService.wsdl</wsdlFile>
+					</wsdlFiles>
+<!--					<wsdlUrls>-->
+<!--						<wsdlUrl>${order.service}/OrderService?wsdl</wsdlUrl>-->
+<!--					</wsdlUrls>-->
 					<keep>true</keep>
 					<packageName>uk.ac.bcu.orderservice.proxy</packageName>
 					<sourceDestDir>src/main/java</sourceDestDir>

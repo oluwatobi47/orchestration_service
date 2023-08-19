@@ -103,8 +103,8 @@ public class WarehouseServiceImpl implements WarehouseService {
                     var responseBody = mapper.convertValue(exchange.getMessage().getBody(), WarehouseResponse.class);
                     var map = mapper.convertValue(responseBody.getData(), new TypeReference<Map<String, Object>>() {});
                     var response = new DataResponse<List<ProductDTO>>(null);
-                    if(map.containsKey("products")) {
-                        var productList = mapper.convertValue(map.get("products"), new TypeReference<List<ProductDTO>>() {});
+                    if(map.containsKey("products_quantity")) {
+                        var productList = mapper.convertValue(map.get("products_quantity"), new TypeReference<List<ProductDTO>>() {});
                         response.setData(productList);
                     }
                     var message = new DefaultMessage(exchange);

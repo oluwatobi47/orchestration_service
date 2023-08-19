@@ -40,7 +40,7 @@ public class ExceptionHandler implements Processor {
                 message.setHeader(Exchange.HTTP_RESPONSE_CODE, ((ProcessValidationException) exception).getStatusCode().value());
             }  else if (exception instanceof SOAPFaultException) {
                 response = new DataResponse<String>(null, false, ((SOAPFaultException) exception).getMessage());
-                message.setHeader(Exchange.HTTP_RESPONSE_CODE, ((SOAPFaultException) exception).getFault().getFaultCode());
+                message.setHeader(Exchange.HTTP_RESPONSE_CODE, 500);
             }
 
         }

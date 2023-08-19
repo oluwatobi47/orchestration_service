@@ -33,6 +33,7 @@ public class AuthRoute extends RouteBuilder {
     public void configure() throws Exception {
         restConfiguration()
                 .enableCORS(true)
+                .corsAllowCredentials(true)
                 .component("servlet")
                 .bindingMode(RestBindingMode.json)
 

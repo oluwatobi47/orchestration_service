@@ -1,5 +1,28 @@
 version: '3'
+
 services:
+  orchestration_service:
+    container_name: orchestrator
+    depends_on:
+      - order_service
+    image: alaooluwatobi/soa_orchestration_service:latest
+    ports:
+      - "3000:3000"
+    networks:
+      - my_network
+    environment:
+      - AUTH_SERVICE_URL=http://auth_service:8080
+      - INV_SERVICE_URL=http://warehouse-service:8000
+      - ORDER_SERVICE_URL=http://order_service:8080
+      - NOT_SERVICE_URL=http://notification_service:3000
+      - SUB_SERVICE_URL=http://subscription_payment_service:8000
+    restart: on-failure
+#    restart_policy:
+#      condition: on-failure
+#      delay: 10s
+#      max_attempts: 3
+#      window: 60s
+
   auth_service:
     container_name: auth_service
     image: alaooluwatobi/soa_auth_service:latest
@@ -28,6 +51,15 @@ services:
       - "3003:8080"
     networks:
       - my_network
+    environment:
+      - WAREHOUSE_SERVICE=warehouse-service:8000
+      - MONGO_CONN=mongodb+srv://new-user:d7gxrpwN3Rhzm1vZ@cluster0.nnsd0.mongodb.net/?retryWrites=true&w=majority
+        DB_NAME=IMS
+#    healthcheck:
+#      test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
+#      interval: 30s
+#      timeout: 10s
+#      retries: 5
 
   notification_service:
     container_name: notification_service
