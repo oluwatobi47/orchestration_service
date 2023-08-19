@@ -114,8 +114,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         routeDefinition
                 // Transform request to external api payload
                 .process(this::buildClientIdPayload)
-                .marshal().json(JsonLibrary.Jackson) // Handles serialisation
                 .setHeader(Exchange.HTTP_METHOD, HttpMethods.POST)
+                .marshal().json(JsonLibrary.Jackson) // Handles serialisation
                 .toD(String.format("%s/api/get_payments?bridgeEndpoint=true", serviceEndpoint.getSubscriptionServiceUrl()))
                 .unmarshal().json(JsonLibrary.Jackson) // Handles de-serialisation from external api response
                 .process(exchange -> this.transformToDataResponse(exchange, List.class))

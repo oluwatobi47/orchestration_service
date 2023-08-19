@@ -59,7 +59,6 @@ public class WarehouseServiceImpl implements WarehouseService {
     private void incrementProductRoute(RouteDefinition route) {
         route
                 .setExchangePattern(ExchangePattern.InOut)
-                .setHeader(Exchange.HTTP_METHOD, HttpMethods.PUT)
                 // Transform request to external api payload
                 .process(exchange -> {
                     var request = exchange.getIn().getBody(ProductValidationRequest.class);
@@ -72,7 +71,9 @@ public class WarehouseServiceImpl implements WarehouseService {
                     exchange.setMessage(message);
                 })
                 .marshal().json(JsonLibrary.Jackson)
+                .setHeader(Exchange.HTTP_METHOD, HttpMethods.PUT)
                 .toD(String.format("%s/${exchangeProperty.clientId}/products/${exchangeProperty.productId}/quantity?bridgeEndpoint=true", serviceEndpoint.getWarehouseServiceUrl()))
+                .to("log:DEBUG?showBody=true&showHeaders=true")
                 .unmarshal().json(JsonLibrary.Jackson)
                 .onException(Exception.class)
                 .onExceptionOccurred(exceptionHandler)

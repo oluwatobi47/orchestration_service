@@ -20,6 +20,7 @@ public class OrderRoute extends RouteBuilder {
     private void handleOrderRelatedBusinessLogic() {
         this.orderService.handlePlaceOrder(from("direct:place-order"));
         this.orderService.handleCancelOrder(from("direct:cancel-order"));
+        this.orderService.handleCompleteOrder(from("direct:complete-order"));
         this.orderService.handleGetOrders(from("direct:get-client-orders"));
         this.orderService.registerAdditionalHandlers(this::from);
     }
@@ -36,6 +37,7 @@ public class OrderRoute extends RouteBuilder {
                 .produces(MediaType.APPLICATION_JSON_VALUE)
                 .post("/order/place").to("direct:place-order").type(OrderRequest.class)
                 .patch("/order/cancel/{orderRef}").to("direct:cancel-order")
+                .patch("/order/complete/{orderRef}").to("direct:complete-order")
                 .get("/orders/{clientId}").to("direct:get-client-orders");
 
         this.handleOrderRelatedBusinessLogic();

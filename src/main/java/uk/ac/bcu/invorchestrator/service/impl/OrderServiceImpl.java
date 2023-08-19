@@ -161,6 +161,32 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
+    public void handleCompleteOrder(RouteDefinition routeDefinition) {
+        routeDefinition
+                .setExchangePattern(ExchangePattern.InOut)
+                .process(exchange -> {
+                    var orderRef = exchange.getMessage().getHeader("orderRef", String.class);
+                    var orderData = orderServiceApi.getOrderByOrderRef(orderRef);
+                    var order = orderData.get(0);
+                    // End process execution if order is not in pending state
+                    if (!order.getOrderStatus().equals(OrderStatus.PROCESSING.toString())) {
+                        throw new ProcessValidationException(HttpStatus.BAD_REQUEST, "Only an order being processed can be cancelled");
+                    }
+                    orderServiceApi.updateOrderStatus(orderRef, OrderStatus.FULFILLED.toString());
+                })
+                .process(exchange -> {
+                    var dataResponse = new DataResponse(null, true, "Order fulfilled successfully");
+                    var message = new DefaultMessage(exchange);
+                    message.setBody(dataResponse);
+                    exchange.setMessage(message);
+                })
+                .onException(Exception.class)
+                .onExceptionOccurred(exceptionHandler)
+                .handled(true)
+                .end();
+    }
+
+    @Override
     public void handleGetOrders(RouteDefinition routeDefinition) {
         routeDefinition
                 .setExchangePattern(ExchangePattern.InOut)
