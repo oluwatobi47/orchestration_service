@@ -5,6 +5,7 @@ import org.apache.camel.Processor;
 import org.apache.camel.http.base.HttpOperationFailedException;
 import org.apache.camel.support.DefaultMessage;
 import org.apache.tomcat.util.json.JSONParser;
+import org.apache.tomcat.util.json.ParseException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import uk.ac.bcu.invorchestrator.dto.DataResponse;
@@ -23,16 +24,17 @@ public class ExceptionHandler implements Processor {
         if (exception != null) {
             exception.printStackTrace();
             if(exception instanceof HttpOperationFailedException) {
-                // Custom handling for responses from sub and payment service
-                var isSubServiceRequest = exchange.getFromEndpoint().getEndpointUri().startsWith("servlet:/account");
-                if (!isSubServiceRequest) {
-                    var parser = new JSONParser(((HttpOperationFailedException) exception).getResponseBody());
-                    if(!((HttpOperationFailedException) exception).getResponseBody().isEmpty()) {
+                var parser = new JSONParser(((HttpOperationFailedException) exception).getResponseBody());
+                if(!((HttpOperationFailedException) exception).getResponseBody().isEmpty()) {
+                    try {
                         var responseBody = parser.parseObject();
                         response = new DataResponse<String>(null, false, (String) responseBody.get("message"));
-                    } else {
-                        response.setMessage("An api error occurred. Please contact administrator for support");
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
+
+                } else {
+                    response.setMessage("An api error occurred. Please contact administrator for support");
                 }
                 message.setHeader(Exchange.HTTP_RESPONSE_CODE, ((HttpOperationFailedException) exception).getStatusCode());
             } else if (exception instanceof ProcessValidationException) {

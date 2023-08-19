@@ -151,12 +151,12 @@
 					</execution>
 				</executions>
 				<configuration>
-					<wsdlFiles>
-						<wsdlFile>src/main/resources/static/OrderService.wsdl</wsdlFile>
-					</wsdlFiles>
-<!--					<wsdlUrls>-->
-<!--						<wsdlUrl>${order.service}/OrderService?wsdl</wsdlUrl>-->
-<!--					</wsdlUrls>-->
+<!--					<wsdlFiles>-->
+<!--						<wsdlFile>./src/main/resources/static/OrderService.wsdl</wsdlFile>-->
+<!--					</wsdlFiles>-->
+					<wsdlUrls>
+						<wsdlUrl>${order.service}/OrderService?wsdl</wsdlUrl>
+					</wsdlUrls>
 					<keep>true</keep>
 					<packageName>uk.ac.bcu.orderservice.proxy</packageName>
 					<sourceDestDir>src/main/java</sourceDestDir>

@@ -11,11 +11,11 @@ services:
     networks:
       - my_network
     environment:
-      - AUTH_SERVICE_URL=http://auth_service:8080
-      - INV_SERVICE_URL=http://warehouse-service:8000
-      - ORDER_SERVICE_URL=http://order_service:8080
-      - NOT_SERVICE_URL=http://notification_service:3000
-      - SUB_SERVICE_URL=http://subscription_payment_service:8000
+      - AUTH_SERVICE_URL=http://auth-service:8080/v1
+      - INV_SERVICE_URL=http://warehouse-service:8000/v1
+      - ORDER_SERVICE_URL=http://order-service:8080
+      - NOT_SERVICE_URL=http://notification-service:3000
+      - SUB_SERVICE_URL=http://subscription-payment-service:8000
     restart: on-failure
 #    restart_policy:
 #      condition: on-failure
@@ -23,7 +23,7 @@ services:
 #      max_attempts: 3
 #      window: 60s
 
-  auth_service:
+  auth-service:
     container_name: auth_service
     image: alaooluwatobi/soa_auth_service:latest
     ports:
@@ -44,7 +44,7 @@ services:
     networks:
       - my_network
 
-  order_service:
+  order-service:
     container_name: order_service
     image: falug/order:17
     ports:
@@ -54,14 +54,14 @@ services:
     environment:
       - WAREHOUSE_SERVICE=warehouse-service:8000
       - MONGO_CONN=mongodb+srv://new-user:d7gxrpwN3Rhzm1vZ@cluster0.nnsd0.mongodb.net/?retryWrites=true&w=majority
-        DB_NAME=IMS
+      - DB_NAME=IMS
 #    healthcheck:
 #      test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
 #      interval: 30s
 #      timeout: 10s
 #      retries: 5
 
-  notification_service:
+  notification-service:
     container_name: notification_service
     image: falug/notification:6
     ports:
@@ -69,9 +69,9 @@ services:
     networks:
       - my_network
 
-  subscription_payment_service:
+  subscription-payment-service:
     container_name: subscription_and_payment_service
-    image: barotemus/subpay:latest
+    image: barotemus/subandpay:latest
     ports:
       - "3005:8000"
     networks:
