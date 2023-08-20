@@ -1,13 +1,13 @@
 version: '3'
 
 services:
-  orchestration_service:
+  orchestration-service:
     container_name: orchestrator
     depends_on:
-      - order_service
+      - order-service
     image: alaooluwatobi/soa_orchestration_service:latest
     ports:
-      - "3000:3000"
+      - "3000:8005"
     networks:
       - my_network
     environment:
@@ -22,6 +22,17 @@ services:
 #      delay: 10s
 #      max_attempts: 3
 #      window: 60s
+  ui-client-service:
+    container_name: ui_client
+    depends_on:
+      - orchestration-service
+    image: alaooluwatobi/soa_inventory_client:latest
+    ports:
+      - "4000:8080"
+    networks:
+      - my_network
+#    environment:
+#      - PORT=4000
 
   auth-service:
     container_name: auth_service
