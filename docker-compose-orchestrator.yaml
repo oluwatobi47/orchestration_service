@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  orchestration-service:
+    container_name: orchestrator
+    build: # Use build in place of image option
+      context: .
+      dockerfile: Dockerfile
+    image: alaooluwatobi/soa_orchestration_service:1
+    ports:
+      - "3000:8005"
+    networks:
+      - my_network
+    environment:
+      - AUTH_SERVICE_URL=http://auth-service:8080/v1
+      - INV_SERVICE_URL=http://warehouse-service:8000/v1
+      - ORDER_SERVICE_URL=http://order-service:8080
+      - NOT_SERVICE_URL=http://notification-service:3000
+      - SUB_SERVICE_URL=http://subscription-payment-service:8000
